@@ -20,7 +20,7 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=100)
-    phone_number = models.CharField(max_length=15, null=True, blank=True)
+    phone_number = models.CharField(max_length=15, unique=True)
 
 
     is_active = models.BooleanField(default=True)
@@ -29,4 +29,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['full_name']
+    REQUIRED_FIELDS = ['full_name','phone_number']

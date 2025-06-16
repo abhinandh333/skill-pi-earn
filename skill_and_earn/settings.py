@@ -96,12 +96,10 @@ DATABASES = {
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
+    
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-        'OPTIONS': {'min_length': 12},
+        'OPTIONS': {'min_length': 6},
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -111,6 +109,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 AUTH_USER_MODEL = 'website.CustomUser'
+ACCOUNT_ADAPTER = 'website.adapters.CustomAccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'website.adapters.CustomSocialAccountAdapter'
+
 
 AUTHENTICATION_BACKENDS = [
     'website.backends.PhoneNumberBackend',  # use your backend
