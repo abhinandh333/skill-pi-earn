@@ -7,14 +7,17 @@ class CustomSignupForm(SignupForm):
     full_name = forms.CharField(label='Full Name')
     phone_number = forms.CharField(label='Phone Number')
 
-    class Meta:
-        model = CustomUser
-        fields = ['full_name', 'phone_number']
-
     def clean_phone_number(self):
         phone = self.cleaned_data.get('phone_number')
+
+        # Check if phone is exactly 10 digits and all numeric
+        if not phone.isdigit() or len(phone) != 10:
+            raise ValidationError("Phone number must be exactly 10 digits.")
+
+        # Check uniqueness
         if CustomUser.objects.filter(phone_number=phone).exists():
             raise ValidationError("A user with this phone number already exists.")
+
         return phone
 
     def clean_password2(self):
