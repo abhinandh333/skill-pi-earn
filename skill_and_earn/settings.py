@@ -58,8 +58,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-LOGIN_REDIRECT_URL = '/complete_profile/'
-ACCOUNT_SIGNUP_REDIRECT_URL = '/complete_profile/'
+
 
 LOGOUT_REDIRECT_URL = '/'
 
@@ -167,5 +166,5 @@ ACCOUNT_FORMS = {
     'signup': 'website.forms.CustomSignupForm'
 }
 
-ACCOUNT_SIGNUP_REDIRECT_URL = '/complete_profile/'
+
 
