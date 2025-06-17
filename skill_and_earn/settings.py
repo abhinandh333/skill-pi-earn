@@ -5,6 +5,7 @@ Django settings for skill_and_earn project.
 import os
 from pathlib import Path
 import dj_database_url  # ✅ Import moved to top
+from allauth.core.exceptions import ImmediateHttpResponse
 
 # Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,13 +38,15 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # ✅ Correct place
     'django.contrib.sessions.middleware.SessionMiddleware',
-
+    
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+   
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    
 
   
 ]
@@ -55,7 +58,9 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/complete_profile/'
+ACCOUNT_SIGNUP_REDIRECT_URL = '/complete_profile/'
+
 LOGOUT_REDIRECT_URL = '/'
 
 ROOT_URLCONF = 'skill_and_earn.urls'
@@ -71,7 +76,7 @@ from decouple import config
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [ BASE_DIR / 'templates' ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,7 +87,10 @@ TEMPLATES = [
         },
     },
 ]
-
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 WSGI_APPLICATION = 'skill_and_earn.wsgi.application'
 
 
@@ -108,14 +116,19 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
 AUTH_USER_MODEL = 'website.CustomUser'
+
 ACCOUNT_ADAPTER = 'website.adapters.CustomAccountAdapter'
 SOCIALACCOUNT_ADAPTER = 'website.adapters.CustomSocialAccountAdapter'
 
-
 AUTHENTICATION_BACKENDS = [
-    'website.backends.PhoneNumberBackend',  # use your backend
-    'django.contrib.auth.backends.ModelBackend',  # optional fallback
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 
@@ -131,6 +144,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -151,4 +167,5 @@ ACCOUNT_FORMS = {
     'signup': 'website.forms.CustomSignupForm'
 }
 
+ACCOUNT_SIGNUP_REDIRECT_URL = '/complete_profile/'
 

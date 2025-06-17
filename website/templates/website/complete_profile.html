@@ -1,0 +1,10 @@
+{% extends "hf.html" %}
+{% block code %}
+  <h2>Complete Your Profile</h2>
+  <form method="POST">
+    {% csrf_token %}
+    <label for="phone_number">Phone Number:</label>
+    <input type="text" name="phone_number" required>
+    <button type="submit">Submit</button>
+  </form>
+{% endblock %}

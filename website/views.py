@@ -3,6 +3,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login,authenticate
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from .forms import CustomSignupForm, EmailLoginForm
+
+
+
 
 # Create your views here.from django.shortcuts import render
 
@@ -45,35 +49,39 @@ from django.contrib.auth import login
 from .forms import CustomSignupForm
 
 
+def email_login_view(request):
+    form = EmailLoginForm(request.POST or None)
+    error = None
+
+    if request.method == 'POST':
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user = authenticate(request, email=email, password=password)
+            if user:
+                login(request, user)
+                return redirect('home')  # change to your homepage or dashboard
+            else:
+                error = "Invalid email or password."
+
+    return render(request, 'email_login.html', {'form': form, 'error': error})
 
 def signup(request):
     if request.method == 'POST':
         form = CustomSignupForm(request.POST)
         if form.is_valid():
             form.save(request)
-            messages.success(request, 'Account created successfully! You can now log in.')
-            return redirect('login')  # Redirect to login page
-        else:
-            messages.error(request, 'Please correct the error below.')
+            return redirect('login')
     else:
         form = CustomSignupForm()
-    
     return render(request, 'signup.html', {'form': form})
-
-
 
 def login_view(request):
     if request.method == 'POST':
-        phone_number = request.POST.get('phone_number')
-        password = request.POST.get('password')
-
-        user = authenticate(request, phone_number=phone_number, password=password)
-
-        if user is not None:
-            login(request, user)  # ✅ Correct call
+        email = request.POST['email']
+        password = request.POST['password']
+        user = authenticate(request, email=email, password=password)
+        if user:
+            login(request, user)
             return redirect('home')
-        else:
-            messages.error(request, 'Invalid phone number or password')
-
     return render(request, 'login.html')
-

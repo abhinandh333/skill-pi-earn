@@ -1,6 +1,9 @@
 # website/urls.py
-from django.urls import path
+from django.urls import path,include
 from . import views
+from .views import email_login_view
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -11,5 +14,9 @@ urlpatterns = [
     path('joblist/', views.joblist, name='joblist'),
     path('signup/', views.signup, name='signup'),
     path('login/', views.login_view, name='login'),
+    path('accounts/', include('allauth.urls')),
+    
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
 

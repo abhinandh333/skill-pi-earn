@@ -1,31 +1,9 @@
 from django import forms
-from .models import CustomUser
 from allauth.account.forms import SignupForm
-from django.core.exceptions import ValidationError
 
 class CustomSignupForm(SignupForm):
-    full_name = forms.CharField(label='Full Name')
-    phone_number = forms.CharField(label='Phone Number')
-
-    def clean_phone_number(self):
-        phone = self.cleaned_data.get('phone_number')
-
-        # Check if phone is exactly 10 digits and all numeric
-        if not phone.isdigit() or len(phone) != 10:
-            raise ValidationError("Phone number must be exactly 10 digits.")
-
-        # Check uniqueness
-        if CustomUser.objects.filter(phone_number=phone).exists():
-            raise ValidationError("A user with this phone number already exists.")
-
-        return phone
-
-    def clean_password2(self):
-        p1 = self.cleaned_data.get("password1")
-        p2 = self.cleaned_data.get("password2")
-        if p1 and p2 and p1 != p2:
-            raise forms.ValidationError("Passwords do not match.")
-        return p2
+    full_name = forms.CharField(max_length=255, label='Full Name')
+    phone_number = forms.CharField(max_length=15, label='Phone Number')
 
     def save(self, request):
         user = super().save(request)
@@ -33,5 +11,7 @@ class CustomSignupForm(SignupForm):
         user.phone_number = self.cleaned_data['phone_number']
         user.save()
         return user
-
-
+    
+class EmailLoginForm(forms.Form):
+    email = forms.EmailField(label='Email')
+    password = forms.CharField(widget=forms.PasswordInput, label='Password')
