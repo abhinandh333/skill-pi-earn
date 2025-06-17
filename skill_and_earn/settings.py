@@ -166,5 +166,13 @@ ACCOUNT_FORMS = {
     'signup': 'website.forms.CustomSignupForm'
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'skillpiearn333@gmail.com'
+EMAIL_HOST_PASSWORD = 'tdhq yblc xlwp lqog'  # use App Password, NOT your Gmail password
+
+DEFAULT_FROM_EMAIL = 'Skill And Earn <skillpiearn333@gmail.com>'
 
 
