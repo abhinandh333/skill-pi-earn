@@ -8,4 +8,4 @@ class CustomAccountAdapter(DefaultAccountAdapter):
 
 class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
     def get_login_redirect_url(self, request):
-        return reverse('home')  # same here
+        return reverse('login')  # same here

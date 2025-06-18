@@ -18,12 +18,27 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+
+    # 👇 Add user type field
+    USER_TYPE_CHOICES = [
+        ('employee', 'Employee'),
+        ('owner', 'Shop/Enterprise Owner'),
+        ('normal', 'Normal User'),
+    ]
+    user_type = models.CharField(
+        max_length=20,
+        choices=USER_TYPE_CHOICES,
+        null=True,
+        blank=True,
+        verbose_name="User Type"
+    )
 
     objects = CustomUserManager()
 
@@ -32,3 +47,5 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+

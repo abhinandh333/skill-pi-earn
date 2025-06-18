@@ -4,6 +4,7 @@ from django.contrib.auth import login,authenticate
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import CustomSignupForm, EmailLoginForm
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -85,3 +86,13 @@ def login_view(request):
             login(request, user)
             return redirect('home')
     return render(request, 'login.html')
+
+@login_required
+def select_user_type(request):
+    if request.method == 'POST':
+        user_type = request.POST.get('user_type')
+        if user_type in ['employee', 'owner', 'normal']:
+            request.user.user_type = user_type
+            request.user.save()
+            return redirect('/')  # or your app home page
+    return render(request, 'select_user_type.html')

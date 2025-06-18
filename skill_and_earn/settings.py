@@ -60,7 +60,7 @@ AUTHENTICATION_BACKENDS = [
 
 
 
-LOGOUT_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = 'select_user_type'
 
 ROOT_URLCONF = 'skill_and_earn.urls'
 
@@ -175,4 +175,7 @@ EMAIL_HOST_PASSWORD = 'tdhq yblc xlwp lqog'  # use App Password, NOT your Gmail 
 
 DEFAULT_FROM_EMAIL = 'Skill And Earn <skillpiearn333@gmail.com>'
 
+MIDDLEWARE += [
+    'website.middleware.ForceUserTypeMiddleware',
+]
 
