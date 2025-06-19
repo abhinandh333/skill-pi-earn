@@ -6,46 +6,140 @@
 
 <form method="get" action="{% url 'search_employees' %}" class="bg-gray-800 p-6 rounded-lg shadow-md max-w-3xl mx-auto text-white space-y-4">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    
     <!-- State -->
     <div>
-      <label for="state" class="block text-sm font-medium text-gray-300">State</label>
-      <input type="text" name="state" id="state" value="{{ request.GET.state }}" placeholder="e.g. Kerala"
+      <label for="state" class="block text-sm text-gray-300 mb-1">State</label>
+      <input list="state-options" name="state" id="state" value="{{ request.GET.state }}" placeholder="Type or choose a state"
              class="w-full p-2 border border-gray-500 rounded bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+      <datalist id="state-options">
+        <option value="All">
+        <option value="Kerala">
+        <option value="Tamil Nadu">
+        <option value="Karnataka">
+        
+      </datalist>
     </div>
 
     <!-- District -->
     <div>
-      <label for="district" class="block text-sm font-medium text-gray-300">District</label>
-      <input type="text" name="district" id="district" value="{{ request.GET.district }}" placeholder="e.g. Kottayam"
+      <label for="district" class="block text-sm text-gray-300 mb-1">District</label>
+      <input list="district-options" name="district" id="district" value="{{ request.GET.district }}" placeholder="Type or choose a district"
              class="w-full p-2 border border-gray-500 rounded bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+  <datalist id="district-options">
+    <option value="All">
+    <option value="Thiruvananthapuram">
+    <option value="Kollam">
+    <option value="Pathanamthitta">
+    <option value="Alappuzha">
+    <option value="Kottayam">
+    <option value="Idukki">
+    <option value="Ernakulam">
+    <option value="Thrissur">
+    <option value="Palakkad">
+    <option value="Malappuram">
+    <option value="Kozhikode">
+    <option value="Wayanad">
+    <option value="Kannur">
+    <option value="Kasaragod">
+    
+  </datalist>
     </div>
 
     <!-- City -->
     <div>
-      <label for="city" class="block text-sm font-medium text-gray-300">City</label>
-      <input type="text" name="city" id="city" value="{{ request.GET.city }}" placeholder="e.g. Changanacherry"
+      <label for="city" class="block text-sm text-gray-300 mb-1">City</label>
+      <input list="city-options" name="city" id="city" value="{{ request.GET.city }}" placeholder="Type or choose a City"
              class="w-full p-2 border border-gray-500 rounded bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+      <datalist id="city-options">
+        <option value="All">
+        <option value="Changanacherry">
+        <option value="Ettumanoor">
+        <option value="Pala">
+        <option value="Thiruvalla">
+        <option value="Kanjirappally">
+        <option value="Manarcad">
+        <option value="Vaikom">
+        <option value="Kaduthuruthy">
+        <option value="Kuravilangad">
+        <option value="Mundakayam">
+        <option value="Neyyattinkara">
+        <option value="Varkala">
+        <option value="Attingal">
+        <option value="Adoor">
+        <option value="Pathanapuram">
+        <option value="Kottarakkara">
+        <option value="Karunagappally">
+        <option value="Kayamkulam">
+        <option value="Ambalappuzha">
+        <option value="Cherthala">
+        <option value="Manjeri">
+        <option value="Nilambur">
+        <option value="Kalpetta">
+        <option value="Perinthalmanna">
+        <option value="Tirur">
+        <option value="Koyilandy">
+        <option value="Thalassery">
+        <option value="Payyannur">
+        <option value="Kanhangad">
+        <option value="Beypore">
+        
+      </datalist>
     </div>
+  
 
     <!-- Category -->
     <div>
-      <label for="category" class="block text-sm font-medium text-gray-300">Work Category</label>
-      <input type="text" name="category" id="category" value="{{ request.GET.category }}" placeholder="e.g. IT Tech"
+      <label for="category" class="block text-sm text-gray-300 mb-1">Work Category</label>
+      <input list="category-options" name="category" id="category" value="{{ request.GET.category }}" placeholder="Type or choose Work category "
              class="w-full p-2 border border-gray-500 rounded bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+      <datalist id="category-options">
+        <option value="All">
+        <option value="Driver">
+        <option value="Carpenter">
+        <option value="Plumber">
+        <option value="Electrician">
+        <option value="IT Tech">
+        <option value="Painter">
+        <option value="Mechanic">
+        <option value="Mason">
+        <option value="Welder">
+        <option value="AC Technician">
+        <option value="Cook">
+        <option value="Housekeeping">
+        <option value="Security Guard">
+        <option value="Delivery Agent">
+        <option value="Tailor">
+        <option value="Beautician">
+        <option value="Barber">
+        <option value="Gardener">
+        <option value="Labourer">
+        <option value="Tiles Worker">
+        <option value="Interior Designer">
+        <option value="Event Assistant">
+        <option value="Tuition Teacher">
+        <option value="Photographer">
+        <option value="Videographer">
+        <option value="Data Entry Operator">
+        <option value="Shop Helper">
+        <option value="Field Staff">
+        <option value="Nurse/Paramedic">
+        <option value="Marketing Executive">
+        
+      </datalist>
     </div>
   </div>
 
   <!-- Submit Button -->
-  <div>
-    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded flex justify-center items-center">
-      <span>🔍 Search</span>
-      <svg id="spinner" class="ml-2 w-5 h-5 text-white hidden animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
-      </svg>
-    </button>
-  </div>
+  <button type="submit" class="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded flex justify-center items-center">
+    🔍 Search
+    <svg id="spinner" class="ml-2 w-5 h-5 text-white hidden animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+    </svg>
+  </button>
 </form>
+
 
 <script>
   function showLoading() {
