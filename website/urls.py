@@ -21,7 +21,7 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('accounts/', include('allauth.urls')),
     path('select-user-type/', select_user_type, name='select_user_type'),
-    path('complete-profile/', views.complete_profile, name='complete_profile'),
+    
     path('search/', views.search_employees, name='search_employees'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('edit-profile/', edit_profile, name='edit_profile'),

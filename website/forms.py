@@ -101,6 +101,11 @@ KERALA_DISTRICT_CHOICES = [
 class ProfileEditForm(forms.ModelForm):
     state = forms.ChoiceField(choices=STATE_CHOICES, required=True)
     district = forms.ChoiceField(choices=KERALA_DISTRICT_CHOICES, required=True)
+    USER_TYPE_CHOICES = [
+        ('employee', 'Employee'),
+        ('shop_owner', 'Shop/Enterprise Owner'),
+    ]
+    user_type = forms.ChoiceField(choices=Profile.USER_TYPE_CHOICES,required=True)
 
     class Meta:
         model = Profile
@@ -108,6 +113,7 @@ class ProfileEditForm(forms.ModelForm):
             'full_name',
             'phone_number',
             'alternate_phone',
+            'user_type',
             'state',
             'district',
             'city',

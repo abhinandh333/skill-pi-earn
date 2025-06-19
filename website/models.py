@@ -54,9 +54,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 
 class Profile(models.Model):
+    USER_TYPE_CHOICES = [
+        ('employee', 'Employee'),
+        ('shop_owner', 'Shop/Enterprise Owner'),
+            ]
+      
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-
-    # ✅ Add all needed fields
     full_name = models.CharField(max_length=255, blank=True, null=True)
     phone_number = models.CharField(max_length=15, blank=True)
     alternate_phone = models.CharField(max_length=15, blank=True, null=True)

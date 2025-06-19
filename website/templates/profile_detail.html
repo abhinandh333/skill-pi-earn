@@ -12,7 +12,7 @@
   {% else %}
     <div id="profilePic"
          onclick="toggleShape()"
-         class="w-16 h-16 aspect-square rounded-full bg-gray-600 flex items-center justify-center text-white text-[8px] font-semibold cursor-pointer transition-all duration-300">
+         class="w-16 h-16 aspect-square rounded-full bg-gray-600 flex items-center justify-center text- text-[8px] font-semibold cursor-pointer transition-all duration-300">
       No Img
     </div>
   {% endif %}
@@ -33,7 +33,7 @@
 
 
     <!-- Profile Details -->
-    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-300">
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-black-300">
       <div><span class="font-semibold text-gray-400">Phone:</span> {{ user.phone_number }}</div>
       <div><span class="font-semibold text-gray-400">Alternate:</span> {{ user.alternate_phone }}</div>
       <div><span class="font-semibold text-gray-400">State:</span> {{ user.state }}</div>

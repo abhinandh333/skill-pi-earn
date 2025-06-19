@@ -177,9 +177,7 @@ EMAIL_HOST_PASSWORD = 'tdhq yblc xlwp lqog'  # use App Password, NOT your Gmail 
 
 DEFAULT_FROM_EMAIL = 'Skill And Earn <skillpiearn333@gmail.com>'
 
-MIDDLEWARE += [
-    'website.middleware.ForceUserTypeMiddleware',
-]
+
 
 
 MEDIA_URL = '/media/'

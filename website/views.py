@@ -130,31 +130,31 @@ from django.shortcuts import render
 from .models import Profile
 from .forms import SearchForm
 
+from .models import Profile
+from django.db.models import Q
+
 def search_employees(request):
-    form = SearchForm(request.GET or None)
-    results = []
+    state = request.GET.get('state')
+    district = request.GET.get('district')
+    city = request.GET.get('city')
+    category = request.GET.get('category')
 
-    if form.is_valid():
-        state = form.cleaned_data.get('state')
-        district = form.cleaned_data.get('district')
-        city = form.cleaned_data.get('city')
-        category = form.cleaned_data.get('category')
+    results = Profile.objects.all()  # ✅ This stays a queryset
 
-        queryset = Profile.objects.filter(user_type='employee')
+    if state and state != 'All':
+        results = results.filter(state__iexact=state)
 
-        if category and category != 'All':
-            queryset = queryset.filter(category__iexact=category)
+    if district and district != 'All':
+        results = results.filter(district__iexact=district)
 
-        if city and city != 'All':
-            results = queryset.filter(city__iexact=city)
-        if not results and district and district != 'All':
-            results = queryset.filter(district__iexact=district)
-        if not results and state and state != 'All':
-            results = queryset.filter(state__iexact=state)
-        if not results:
-            results = queryset  # fallback: show all
+    if city and city != 'All':
+        results = results.filter(city__iexact=city)
 
-    return render(request, 'search_results.html', {'form': form, 'results': results})
+    if category and category != 'All':
+        results = results.filter(category__iexact=category)
+
+    return render(request, 'search_results.html', {'results': results})
+
 
 
 
@@ -181,11 +181,12 @@ def edit_profile(request):
         form = ProfileEditForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect('dashboard')  # or wherever you want to go after update
+            return redirect('dashboard')
     else:
-        form = ProfileEditForm(instance=profile)
+        form = ProfileEditForm(instance=profile)  # ✅ FIXED: Removed POST & FILES
 
     return render(request, 'edit_profile.html', {'form': form})
+
 
 from django.shortcuts import render, get_object_or_404
 from .models import Profile

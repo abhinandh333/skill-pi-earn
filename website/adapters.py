@@ -24,21 +24,9 @@ class CustomAccountAdapter(DefaultAccountAdapter):
         return user
     
 class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
-    def pre_social_login(self, request, sociallogin):
+    def pre_social_login(self, request, sociallogin, **kwargs):
         user = sociallogin.user
-
-        # If user is already logged in or doesn't have email, skip
-        if not user or not user.email:
-            return
-
-        # If the user exists, get the DB user
-        from website.models import CustomUser  # update with your actual user model
-        try:
-            db_user = CustomUser.objects.get(email=user.email)
-        except CustomUser.DoesNotExist:
-            return  # first time login, nothing to do here
-
-        # If phone number is missing, redirect to profile completion
-        if not db_user.phone_number:
-            request.session['socialaccount_email'] = db_user.email  # optional
-            raise ImmediateHttpResponse(redirect(reverse('complete_profile')))
+        if not user.pk:  # New user
+            # If you really still need profile completion
+            # raise ImmediateHttpResponse(redirect(reverse('complete_profile')))
+            pass

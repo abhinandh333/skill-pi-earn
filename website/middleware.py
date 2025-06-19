@@ -25,6 +25,6 @@ class ForceUserTypeMiddleware:
                 not request.path.startswith('/admin/') and
                 not request.path.startswith('/accounts/logout/')
             ):
-                return redirect('/complete-profile/')
+                return redirect('/dashboard/')
 
         return self.get_response(request)
