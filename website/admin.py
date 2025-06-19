@@ -21,3 +21,17 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('email',)
 
 admin.site.register(CustomUser, CustomUserAdmin)
+
+
+
+from django.contrib import admin
+from .models import Profile, ProductImage
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'user_type', 'phone_number', 'state', 'district']  # ✅ updated
+
+
+
+@admin.register(ProductImage)
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = ('profile', 'image', 'uploaded_at')

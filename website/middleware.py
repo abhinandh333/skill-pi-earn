@@ -5,14 +5,26 @@ class ForceUserTypeMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if (
-            request.user.is_authenticated and
-            not request.user.is_superuser and
-            not request.user.is_staff and
-            not request.user.user_type and
-            request.path != '/select-user-type/' and
-            not request.path.startswith('/admin/') and
-            not request.path.startswith('/accounts/logout/')
-        ):
-            return redirect('/select-user-type/')
+        user = request.user
+
+        if user.is_authenticated and not user.is_superuser and not user.is_staff:
+            # Force selection of user_type
+            if (
+                not user.user_type and
+                request.path != '/select-user-type/' and
+                not request.path.startswith('/admin/') and
+                not request.path.startswith('/accounts/logout/')
+            ):
+                return redirect('/select-user-type/')
+
+            # Force profile completion if user is "owner"
+            elif (
+                user.user_type == 'owner' and
+                not hasattr(user, 'profile') and  # assuming Profile model is OneToOne with user
+                request.path != '/complete-profile/' and
+                not request.path.startswith('/admin/') and
+                not request.path.startswith('/accounts/logout/')
+            ):
+                return redirect('/complete-profile/')
+
         return self.get_response(request)

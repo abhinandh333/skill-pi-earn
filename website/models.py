@@ -1,5 +1,9 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db import models
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, full_name, password=None, phone_number=None):
@@ -49,3 +53,44 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
+class Profile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+
+    # ✅ Add all needed fields
+    full_name = models.CharField(max_length=255, blank=True, null=True)
+    phone_number = models.CharField(max_length=15, blank=True)
+    alternate_phone = models.CharField(max_length=15, blank=True, null=True)
+    user_type = models.CharField(max_length=50, blank=True, null=True)
+    alt_number = models.CharField(max_length=15, blank=True, null=True)  # if still used
+    state = models.CharField(max_length=100, blank=True)
+    district = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    category = models.CharField(max_length=100, blank=True)
+    profile_picture = models.ImageField(
+    upload_to='profile_pics/',
+    default='profile_pics/default.jpg',
+    blank=True,
+    null=True)
+
+
+    product_image = models.ImageField(upload_to='product_images/', blank=True, null=True)
+
+    def __str__(self):
+        return self.user.email
+
+    
+
+
+
+
+
+class ProductImage(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='product_images')
+    image = models.ImageField(upload_to='product_images/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+
+@receiver(post_save, sender=CustomUser)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)

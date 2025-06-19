@@ -1,0 +1,98 @@
+{% extends 'hf.html' %}
+{% load static %}
+{% block code %}<!-- Search Form -->
+
+
+
+<form method="get" action="{% url 'search_employees' %}" class="bg-gray-800 p-6 rounded-lg shadow-md max-w-3xl mx-auto text-white space-y-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- State -->
+    <div>
+      <label for="state" class="block text-sm font-medium text-gray-300">State</label>
+      <input type="text" name="state" id="state" value="{{ request.GET.state }}" placeholder="e.g. Kerala"
+             class="w-full p-2 border border-gray-500 rounded bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+
+    <!-- District -->
+    <div>
+      <label for="district" class="block text-sm font-medium text-gray-300">District</label>
+      <input type="text" name="district" id="district" value="{{ request.GET.district }}" placeholder="e.g. Kottayam"
+             class="w-full p-2 border border-gray-500 rounded bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+
+    <!-- City -->
+    <div>
+      <label for="city" class="block text-sm font-medium text-gray-300">City</label>
+      <input type="text" name="city" id="city" value="{{ request.GET.city }}" placeholder="e.g. Changanacherry"
+             class="w-full p-2 border border-gray-500 rounded bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+
+    <!-- Category -->
+    <div>
+      <label for="category" class="block text-sm font-medium text-gray-300">Work Category</label>
+      <input type="text" name="category" id="category" value="{{ request.GET.category }}" placeholder="e.g. IT Tech"
+             class="w-full p-2 border border-gray-500 rounded bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+  </div>
+
+  <!-- Submit Button -->
+  <div>
+    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded flex justify-center items-center">
+      <span>🔍 Search</span>
+      <svg id="spinner" class="ml-2 w-5 h-5 text-white hidden animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+      </svg>
+    </button>
+  </div>
+</form>
+
+<script>
+  function showLoading() {
+    document.getElementById("spinner").classList.remove("hidden");
+  }
+</script>
+
+
+
+<script>
+  function showLoading() {
+    document.getElementById("spinner").classList.remove("hidden");
+  }
+</script>
+
+<!-- Results Section -->
+{% if results %}
+  <div class="mt-10 max-w-4xl mx-auto">
+    <h3 class="text-xl font-semibold text-indigo-300 mb-4 text-center">✨ Search Results</h3>
+    
+    <ul class="space-y-4">
+      {% for user in results %}
+        <li class="bg-gray-800 hover:bg-gray-700 p-4 rounded-lg shadow flex items-center justify-between transition">
+          <div class="flex items-center space-x-4">
+            {% if user.profile_picture %}
+              <img src="{{ user.profile_picture.url }}" alt="{{ user.full_name }}" class="w-12 h-12 rounded-full object-cover border border-gray-600" />
+            {% else %}
+              <div class="w-12 h-12 rounded-full bg-gray-600 flex items-center justify-center text-white text-xs">No Img</div>
+            {% endif %}
+
+            <div>
+              <a href="{% url 'profile_detail' user.id %}" class="text-lg font-semibold text-indigo-400 hover:underline">
+                {{ user.full_name }}
+              </a>
+              <p class="text-sm text-gray-400">{{ user.category }} | {{ user.city }}</p>
+            </div>
+          </div>
+
+          <div class="text-sm text-gray-500 hidden md:block">
+            📍 {{ user.state }}, {{ user.district }}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% else %}
+  <p class="mt-10 text-center text-gray-500">😕 No results found. Try a different filter.</p>
+{% endif %}
+
+{% endblock %}

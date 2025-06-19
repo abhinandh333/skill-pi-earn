@@ -5,6 +5,13 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import CustomSignupForm, EmailLoginForm
 from django.contrib.auth.decorators import login_required
+from .forms import ProfileForm, ProductImageForm
+from .models import Profile
+from django.contrib.auth.decorators import login_required
+from .models import Profile, ProductImage
+from django.shortcuts import resolve_url
+from .forms import ProfileEditForm
+
 
 
 
@@ -12,7 +19,9 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.from django.shortcuts import render
 
 def home(request):
+    messages.info(request, "You have been logged out.")
     return render(request, 'home.html')
+
 
 def contact(request):
     if request.method == "POST":
@@ -61,7 +70,7 @@ def email_login_view(request):
             user = authenticate(request, email=email, password=password)
             if user:
                 login(request, user)
-                return redirect('home')  # change to your homepage or dashboard
+                return redirect('dashboard')  # change to your homepage or dashboard
             else:
                 error = "Invalid email or password."
 
@@ -84,7 +93,7 @@ def login_view(request):
         user = authenticate(request, email=email, password=password)
         if user:
             login(request, user)
-            return redirect('home')
+            return redirect('dashboard')
     return render(request, 'login.html')
 
 @login_required
@@ -94,5 +103,97 @@ def select_user_type(request):
         if user_type in ['employee', 'owner', 'normal']:
             request.user.user_type = user_type
             request.user.save()
-            return redirect('/')  # or your app home page
+            return redirect('dashboard')  # or your app home page
     return render(request, 'select_user_type.html')
+
+
+# views.py
+@login_required
+def complete_profile(request):
+    user = request.user
+
+    # ✅ Get the existing profile or create one if it doesn't exist
+    profile, created = Profile.objects.get_or_create(user=user)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')  # replace with your actual success URL
+    else:
+        form = ProfileForm(instance=profile)
+
+    return render(request, 'complete_profile.html', {'form': form})
+
+
+from django.shortcuts import render
+from .models import Profile
+from .forms import SearchForm
+
+def search_employees(request):
+    form = SearchForm(request.GET or None)
+    results = []
+
+    if form.is_valid():
+        state = form.cleaned_data.get('state')
+        district = form.cleaned_data.get('district')
+        city = form.cleaned_data.get('city')
+        category = form.cleaned_data.get('category')
+
+        queryset = Profile.objects.filter(user_type='employee')
+
+        if category and category != 'All':
+            queryset = queryset.filter(category__iexact=category)
+
+        if city and city != 'All':
+            results = queryset.filter(city__iexact=city)
+        if not results and district and district != 'All':
+            results = queryset.filter(district__iexact=district)
+        if not results and state and state != 'All':
+            results = queryset.filter(state__iexact=state)
+        if not results:
+            results = queryset  # fallback: show all
+
+    return render(request, 'search_results.html', {'form': form, 'results': results})
+
+
+
+def location_filter_view(request):
+    return render(request, 'location_filter.html')
+
+@login_required
+def dashboard(request):
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = None
+    return render(request, 'dashboard.html', {'profile': profile})
+
+def get_login_redirect_url(self, request):
+    print("✅ REDIRECTING MANUAL LOGIN TO DASHBOARD")
+    return resolve_url('/dashboard/')
+
+@login_required
+def edit_profile(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        form = ProfileEditForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')  # or wherever you want to go after update
+    else:
+        form = ProfileEditForm(instance=profile)
+
+    return render(request, 'edit_profile.html', {'form': form})
+
+from django.shortcuts import render, get_object_or_404
+from .models import Profile
+
+def profile_detail(request, pk):
+    user = get_object_or_404(Profile, pk=pk)
+    return render(request, 'profile_detail.html', {'user': user})
+
+
+def job_listing(request):
+    return render(request, 'job_listing.html')

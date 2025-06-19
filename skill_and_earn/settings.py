@@ -82,6 +82,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -160,7 +161,8 @@ ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 SOCIALACCOUNT_ADAPTER = 'website.adapters.CustomSocialAccountAdapter'
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 ACCOUNT_LOGIN_METHODS = {'email'}  # allows login via email
-LOGIN_REDIRECT_URL = '/'  # or wherever you want after login
+LOGIN_REDIRECT_URL = '/dashboard/'
+  # or wherever you want after login
 
 ACCOUNT_FORMS = {
     'signup': 'website.forms.CustomSignupForm'
@@ -178,4 +180,10 @@ DEFAULT_FROM_EMAIL = 'Skill And Earn <skillpiearn333@gmail.com>'
 MIDDLEWARE += [
     'website.middleware.ForceUserTypeMiddleware',
 ]
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
 
