@@ -26,8 +26,10 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('edit-profile/', edit_profile, name='edit_profile'),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
-    path('profile/<int:pk>/', views.profile_detail, name='profile_detail'),
+    path('profile/<int:user_id>/', views.profile_detail, name='profile_detail'),
+    path('review/<int:user_id>/', views.submit_review, name='submit_review'),
     path('job_listing/', views.job_listing, name='job_listing'),
+
 
 ]
 if settings.DEBUG:

@@ -196,10 +196,37 @@ def edit_profile(request):
 from django.shortcuts import render, get_object_or_404
 from .models import Profile
 
-def profile_detail(request, pk):
-    user = get_object_or_404(Profile, pk=pk)
-    return render(request, 'profile_detail.html', {'user': user})
+from .models import Profile, Review
+
+from django.shortcuts import get_object_or_404, render
+from website.models import Profile, Review
+
+def profile_detail(request, user_id):
+    profile = get_object_or_404(Profile, user__id=user_id)
+    return render(request, 'profile_detail.html', {'profile': profile})
 
 
 def job_listing(request):
     return render(request, 'job_listing.html')
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Profile, Review
+from .forms import ReviewForm
+
+def submit_review(request, user_id):
+    profile = get_object_or_404(Profile, user__id=user_id)
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.profile = profile
+            review.save()
+            return redirect('profile_detail', user_id=profile.user.id)
+    else:
+        form = ReviewForm()
+
+    return render(request, 'submit_review.html', {'form': form, 'profile': profile})
+
+

@@ -3,10 +3,10 @@
 
 {% block code %}
 <div class="flex items-center space-x-4">
-  {% if user.profile_picture %}
+  {% if profile.profile_picture %}
     <img id="profilePic"
-         src="{{ user.profile_picture.url }}"
-         alt="{{ user.full_name }}"
+         src="{{ profile.profile_picture.url }}"
+         alt="{{ profile.full_name }}"
          class="w-16 h-16 aspect-square rounded-full border-2 border-indigo-500 shadow object-cover cursor-pointer transition-all duration-300"
          onclick="toggleShape()">
   {% else %}
@@ -17,8 +17,8 @@
     </div>
   {% endif %}
   <div>
-    <h2 class="text-sm font-semibold">{{ user.full_name }}</h2>
-    <p class="text-indigo-400 text-xs">{{ user.category }}</p>
+    <h2 class="text-sm font-semibold">{{ profile.full_name }}</h2>
+    <p class="text-indigo-400 text-xs">{{ profile.category }}</p>
   </div>
 </div>
 
@@ -32,27 +32,61 @@
 
 
 
+
     <!-- Profile Details -->
     <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-black-300">
-      <div><span class="font-semibold text-gray-400">Phone:</span> {{ user.phone_number }}</div>
-      <div><span class="font-semibold text-gray-400">Alternate:</span> {{ user.alternate_phone }}</div>
-      <div><span class="font-semibold text-gray-400">State:</span> {{ user.state }}</div>
-      <div><span class="font-semibold text-gray-400">District:</span> {{ user.district }}</div>
-      <div><span class="font-semibold text-gray-400">City:</span> {{ user.city }}</div>
+      <div><span class="font-semibold text-gray-400">Phone:</span> {{ profile.phone_number }}</div>
+      <div><span class="font-semibold text-gray-400">Alternate:</span> {{ profile.alternate_phone }}</div>
+      <div><span class="font-semibold text-gray-400">State:</span> {{ profile.state }}</div>
+      <div><span class="font-semibold text-gray-400">District:</span> {{ profile.district }}</div>
+      <div><span class="font-semibold text-gray-400">City:</span> {{ profile.city }}</div>
     </div>
-  {% if user.description %}
-  <p class="text-black-200 mt-2"><strong>About:</strong> {{ user.description }}</p>
+  {% if profile.description %}
+  <p class="text-black-200 mt-2"><strong>About:</strong> {{ profile.description }}</p>
 {% endif %}
-    <!-- Product Image -->
-    {% if user.product_image %}
+   
+
+<!-- Show "Leave a Review" button -->
+
+ <a href="{% url 'submit_review' profile.user.id %}">
+  <button class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">➕ Leave a Review</button>
+</a>
+
+
+
+
+
+<h2 class="text-xl font-semibold text-gray-800 mt-8 mb-4">🗣️ Reviews</h2>
+
+{% if profile.reviews.all %}
+  <ul class="space-y-4">
+    {% for review in profile.reviews.all %}
+      <li class="bg-white shadow p-4 rounded-lg border border-gray-200">
+        <p class="text-sm text-gray-600">By {{ review.reviewer_name }} on {{ review.created_at|date:"d M Y" }}</p>
+        <p class="text-yellow-500">⭐ {{ review.rating }} / 5</p>
+        <p class="text-gray-800 mt-2">{{ review.comment }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="text-gray-500">No reviews yet.</p>
+{% endif %}
+
+
+
+ <!-- Product Image -->
+    {% if profile.product_image %}
       <div class="mt-6">
-        <h3 class="text-lg font-semibold mb-2 text-white">Product Image</h3>
-        <img src="{{ user.product_image.url }}" alt="Product" class="w-full rounded-md border border-gray-700 shadow">
+        <h3 class="text-lg font-semibold mb-2 text-black">Product Image</h3>
+        <img src="{{ profile.product_image.url }}" alt="Product" class="w-full rounded-md border border-gray-700 shadow">
       </div>
     {% endif %}
   </div>
 </div>
+
 <br>
+
+
 
 
 

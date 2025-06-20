@@ -172,7 +172,10 @@
             {% endif %}
 
             <div>
-              <a href="{% url 'profile_detail' user.id %}" class="text-lg font-semibold text-indigo-400 hover:underline">
+              <a href="{% url 'profile_detail' user.user.id %}"class="text-lg font-semibold text-indigo-400 hover:underline">
+
+
+
                 {{ user.full_name }}
               </a>
               <p class="text-sm text-gray-400">{{ user.category }} | {{ user.city }}</p>

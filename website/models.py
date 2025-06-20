@@ -99,3 +99,24 @@ class ProductImage(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+
+
+from django.db import models
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+from django.db import models
+from django.utils import timezone
+from .models import Profile  # assuming Profile exists
+
+class Review(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviews')
+    reviewer_name = models.CharField(max_length=255)
+    rating = models.IntegerField()
+    comment = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"Review for {self.profile.user.email} by {self.reviewer_name}"
+

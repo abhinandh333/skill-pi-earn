@@ -35,3 +35,10 @@ class ProfileAdmin(admin.ModelAdmin):
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
     list_display = ('profile', 'image', 'uploaded_at')
+
+
+
+from django.contrib import admin
+from .models import Review
+
+admin.site.register(Review)
