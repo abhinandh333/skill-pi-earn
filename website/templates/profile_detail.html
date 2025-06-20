@@ -46,13 +46,29 @@
 {% endif %}
    
 
-<!-- Show "Leave a Review" button -->
 
- <a href="{% url 'submit_review' profile.user.id %}">
-  <button class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">➕ Leave a Review</button>
-</a>
+<center>
+              <div class="mt-4">
+  <h3 class="text-lg font-medium text-indigo-700"></h3>
+  <p class="text-2xl text-yellow-500 font-bold">
+    ✰{{ profile.average_rating }} 
+  
+  <p class="text-sm text-gray-500">
+    (Based on {{ profile.rating_count }} {{ profile.rating_count|pluralize:"review,reviews" }})
+  </p>
+</div>
 
 
+
+
+
+              <!-- Show "Leave a Review" button -->
+
+              <a href="{% url 'submit_review' profile.user.id %}">
+                <button class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">➕ Leave a Review</button>
+              </a>
+
+</center>
 
 
 

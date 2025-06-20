@@ -173,19 +173,27 @@
 
             <div>
               <a href="{% url 'profile_detail' user.user.id %}"class="text-lg font-semibold text-indigo-400 hover:underline">
-
-
-
-                {{ user.full_name }}
+                 {{ user.full_name }}
               </a>
+               
               <p class="text-sm text-gray-400">{{ user.category }} | {{ user.city }}</p>
             </div>
+            
           </div>
+ 
+  </p>
 
-          <div class="text-sm text-gray-500 hidden md:block">
+          
+          <div class="text-sm text-gray-400 hidden md:block">
             📍 {{ user.state }}, {{ user.district }}
+<p class="text-sm text-yellow-400 font-semibold">
+  ⭐{{ user.average_rating }} ({{ user.rating_count }} ratings)
+</p>
+  </p>
           </div>
+          
         </li>
+        
       {% endfor %}
     </ul>
   </div>
