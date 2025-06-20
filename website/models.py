@@ -64,6 +64,8 @@ class Profile(models.Model):
     phone_number = models.CharField(max_length=15, blank=True)
     alternate_phone = models.CharField(max_length=15, blank=True, null=True)
     user_type = models.CharField(max_length=50, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+
     alt_number = models.CharField(max_length=15, blank=True, null=True)  # if still used
     state = models.CharField(max_length=100, blank=True)
     district = models.CharField(max_length=100, blank=True)

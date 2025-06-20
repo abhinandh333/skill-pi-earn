@@ -114,6 +114,7 @@ class ProfileEditForm(forms.ModelForm):
             'phone_number',
             'alternate_phone',
             'user_type',
+            'description',
             'state',
             'district',
             'city',

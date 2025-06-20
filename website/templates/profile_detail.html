@@ -40,7 +40,9 @@
       <div><span class="font-semibold text-gray-400">District:</span> {{ user.district }}</div>
       <div><span class="font-semibold text-gray-400">City:</span> {{ user.city }}</div>
     </div>
-
+  {% if user.description %}
+  <p class="text-black-200 mt-2"><strong>About:</strong> {{ user.description }}</p>
+{% endif %}
     <!-- Product Image -->
     {% if user.product_image %}
       <div class="mt-6">
@@ -51,4 +53,8 @@
   </div>
 </div>
 <br>
+
+
+
 {% endblock %}
+
