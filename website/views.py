@@ -133,27 +133,32 @@ from .forms import SearchForm
 from .models import Profile
 from django.db.models import Q
 
+from django.shortcuts import render
+from .models import Profile
+from .forms import SearchForm
+
 def search_employees(request):
-    state = request.GET.get('state')
-    district = request.GET.get('district')
-    city = request.GET.get('city')
-    category = request.GET.get('category')
+    form = SearchForm(request.GET or None)
+    results = []
 
-    results = Profile.objects.all()  # ✅ This stays a queryset
+    if request.GET.get("state") or request.GET.get("district") or request.GET.get("city") or request.GET.get("category"):
+        state = request.GET.get("state", "").strip().lower()
+        district = request.GET.get("district", "").strip().lower()
+        city = request.GET.get("city", "").strip().lower()
+        category = request.GET.get("category", "").strip().lower()
 
-    if state and state != 'All':
-        results = results.filter(state__iexact=state)
+        results = Profile.objects.all()
 
-    if district and district != 'All':
-        results = results.filter(district__iexact=district)
+        if state != "all":
+            results = results.filter(state__icontains=state)
+        if district != "all":
+            results = results.filter(district__icontains=district)
+        if city != "all":
+            results = results.filter(city__icontains=city)
+        if category != "all":
+            results = results.filter(category__icontains=category)
 
-    if city and city != 'All':
-        results = results.filter(city__iexact=city)
-
-    if category and category != 'All':
-        results = results.filter(category__iexact=category)
-
-    return render(request, 'search_results.html', {'results': results})
+    return render(request, 'search_results.html', {'form': form, 'results': results})
 
 
 
