@@ -22,7 +22,7 @@ def populate_user_social_data(request, user, sociallogin=None, **kwargs):
 @receiver(user_logged_in)
 def redirect_if_profile_incomplete(request, user, **kwargs):
     if not user.phone_number:
-        request.session['redirect_to_complete_profile'] = True
+        request.session['redirect_to_dashboard'] = True
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

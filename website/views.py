@@ -202,7 +202,7 @@ from django.shortcuts import get_object_or_404, render
 from website.models import Profile, Review
 
 
-@login_required
+
 def profile_detail(request, user_id):
     profile = get_object_or_404(Profile, user__id=user_id)
     return render(request, 'profile_detail.html', {'profile': profile})
@@ -216,6 +216,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Profile, Review
 from .forms import ReviewForm
 
+@login_required
 def submit_review(request, user_id):
     profile = get_object_or_404(Profile, user__id=user_id)
 
