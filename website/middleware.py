@@ -28,3 +28,21 @@ class ForceUserTypeMiddleware:
                 return redirect('/dashboard/')
 
         return self.get_response(request)
+    
+
+
+
+from django.http import HttpResponsePermanentRedirect
+
+class WWWRedirectMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        host = request.get_host()
+        if host == 'skillpiearn.com':
+            return HttpResponsePermanentRedirect(
+                f"https://www.skillpiearn.com{request.get_full_path()}"
+            )
+        return self.get_response(request)
+
