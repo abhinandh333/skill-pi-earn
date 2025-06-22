@@ -235,3 +235,14 @@ def submit_review(request, user_id):
     return render(request, 'submit_review.html', {'form': form, 'profile': profile})
 
 
+
+from django.http import HttpResponse
+
+def robots_txt(request):
+    content = (
+        "User-agent: *\n"
+        "Disallow:\n"
+        "Sitemap: https://www.skillpiearn.com/sitemap.xml"
+    )
+    return HttpResponse(content, content_type="text/plain")
+

@@ -8,6 +8,8 @@ from .views import select_user_type
 from .views import location_filter_view,dashboard
 from .views import edit_profile
 from django.contrib.auth.views import LogoutView
+from django.urls import path
+from website.views import robots_txt
 
 
 urlpatterns = [
@@ -30,6 +32,7 @@ urlpatterns = [
     path('review/<int:user_id>/', views.submit_review, name='submit_review'),
     path('job_listing/', views.job_listing, name='job_listing'),
     path('logout/', LogoutView.as_view(next_page='/?logged_out=1'), name='logout'),
+    path("robots.txt", robots_txt, name="robots_txt"),
 
 
 ]
