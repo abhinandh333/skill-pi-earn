@@ -80,12 +80,22 @@
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Login</button>
                     </form>
-                    <p><a href="{% url 'account_reset_password' %}" style="color: black;">Forgot your password?</a></p>
+                    <p><a href="{% url 'account_reset_password' %}" style="color: black;"><u>Forgot your password?</u></a></p>
 
                     <div class="text-center my-3 position-relative">
                         <hr class="mt-4 mb-3">
                         <span class="position-absolute top-50 start-50 translate-middle bg-white px-2 text-muted">OR</span>
                     </div>
+                      <br>
+
+                        <div class="mt-4 text-center">
+                        <p class="text-sm text-gray-300">
+                            🆕 New user?  <a href="{% url 'signup' %}" style="color: black;"><u>Sign up here</u></a>
+                        </p>
+                        </div>
+
+
+
                     <br>
                                                 <p style="color: black;">
                         If you signed up using a Google account, Then use 

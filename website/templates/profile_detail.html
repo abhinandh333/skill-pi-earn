@@ -37,6 +37,14 @@
     <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-black-300">
       <div><span class="font-semibold text-gray-400">Phone:</span> {{ profile.phone_number }}</div>
       <div><span class="font-semibold text-gray-400">Alternate:</span> {{ profile.alternate_phone }}</div>
+      <p class="text-sm text-black-300">
+  👤 Age: 
+  {% if profile.age %}
+    {{ profile.age }} years
+  {% else %}
+    Not specified
+  {% endif %}
+</p>
       <div><span class="font-semibold text-gray-400">State:</span> {{ profile.state }}</div>
       <div><span class="font-semibold text-gray-400">District:</span> {{ profile.district }}</div>
       <div><span class="font-semibold text-gray-400">City:</span> {{ profile.city }}</div>

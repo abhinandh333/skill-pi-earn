@@ -4,6 +4,9 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.db.models import Avg
+from django.db import models
+from django.contrib.auth import get_user_model
+from datetime import date
 
 
 class CustomUserManager(BaseUserManager):
@@ -28,6 +31,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
+    date_of_birth = models.DateField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -64,6 +68,7 @@ class Profile(models.Model):
     full_name = models.CharField(max_length=255, blank=True, null=True)
     phone_number = models.CharField(max_length=15, blank=True)
     alternate_phone = models.CharField(max_length=15, blank=True, null=True)
+    date_of_birth = models.DateField(null=True, blank=True)
     user_type = models.CharField(max_length=50, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
 
@@ -80,6 +85,16 @@ class Profile(models.Model):
 
 
     product_image = models.ImageField(upload_to='product_images/', blank=True, null=True)
+
+
+    @property
+    def age(self):
+        if self.date_of_birth:
+            today = date.today()
+            return today.year - self.date_of_birth.year - (
+                (today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day)
+            )
+        return None
 
     def __str__(self):
         return self.user.email

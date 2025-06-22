@@ -5,11 +5,16 @@ from .models import Profile, ProductImage
 class CustomSignupForm(SignupForm):
     full_name = forms.CharField(max_length=255, label='Full Name')
     phone_number = forms.CharField(max_length=15, label='Phone Number')
+    date_of_birth = forms.DateField(
+        label='Date of Birth',
+        widget=forms.DateInput(attrs={'type': 'date'})
+    )
 
     def save(self, request):
         user = super().save(request)
         user.full_name = self.cleaned_data['full_name']
         user.phone_number = self.cleaned_data['phone_number']
+        user.date_of_birth = self.cleaned_data['date_of_birth']
         user.save()
         return user
     
@@ -55,6 +60,7 @@ class ProfileForm(forms.ModelForm):
             'full_name',
             'phone_number',
             'alternate_phone',
+            'date_of_birth',
             'user_type',
             'alt_number',
             'state',
@@ -104,6 +110,7 @@ class ProfileEditForm(forms.ModelForm):
     USER_TYPE_CHOICES = [
         ('employee', 'Employee'),
         ('shop_owner', 'Shop/Enterprise Owner'),
+        ('normal_user', 'normal user')
     ]
     user_type = forms.ChoiceField(choices=Profile.USER_TYPE_CHOICES,required=True)
 
@@ -113,6 +120,7 @@ class ProfileEditForm(forms.ModelForm):
             'full_name',
             'phone_number',
             'alternate_phone',
+            'date_of_birth',
             'user_type',
             'description',
             'state',
@@ -122,6 +130,10 @@ class ProfileEditForm(forms.ModelForm):
             'profile_picture',
             'product_image'
         ]
+
+        widgets = {
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+        }
 from django import forms
 from .models import Profile  # Replace with your model
 

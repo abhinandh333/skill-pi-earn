@@ -201,6 +201,8 @@ from .models import Profile, Review
 from django.shortcuts import get_object_or_404, render
 from website.models import Profile, Review
 
+
+@login_required
 def profile_detail(request, user_id):
     profile = get_object_or_404(Profile, user__id=user_id)
     return render(request, 'profile_detail.html', {'profile': profile})

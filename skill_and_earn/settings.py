@@ -185,5 +185,9 @@ DEFAULT_FROM_EMAIL = 'Skill And Earn <skillpiearn333@gmail.com>'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# settings.py
+LOGIN_URL = '/accounts/login/'
+
+
 
 
