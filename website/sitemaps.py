@@ -3,7 +3,13 @@ from django.shortcuts import reverse
 
 class StaticViewSitemap(Sitemap):
     def items(self):
-        return ['home', 'about', 'contact', 'search']  # Add your named URL patterns here
+         return [
+            'home',
+            'search_employees',
+            'contact',
+            'signup',
+            'login',
+        ]
 
     def location(self, item):
         return reverse(item)

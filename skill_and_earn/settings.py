@@ -20,6 +20,7 @@ ALLOWED_HOSTS = [
     'skillpiearn.com',
     'www.skillpiearn.com',
     'skill-pi-earn.onrender.com',
+    '127.0.0.1', 'localhost',
 ]
 
 # Application definition
@@ -59,6 +60,8 @@ MIDDLEWARE = [
 ]
 
 SITE_ID = 1
+
+
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
