@@ -19,8 +19,10 @@ from .forms import ProfileEditForm
 # Create your views here.from django.shortcuts import render
 
 def home(request):
-    messages.info(request, "You have been logged out.")
+    if request.GET.get('logged_out'):
+        messages.info(request, "You have been logged out.")
     return render(request, 'home.html')
+
 
 
 def contact(request):

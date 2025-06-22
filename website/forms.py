@@ -178,7 +178,17 @@ from .models import Review
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ['reviewer_name', 'rating', 'comment']
+        fields = ['rating', 'comment']
+        widgets = {
+            'rating': forms.NumberInput(attrs={
+                'min': '0',
+                'max': '5',
+                'step': '0.5',
+                'class': 'form-control',
+                'placeholder': 'Rate out of 5',
+            }),
+            'comment': forms.Textarea(attrs={'class': 'form-control'}),
+        }
 
 
 

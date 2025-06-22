@@ -29,6 +29,7 @@ urlpatterns = [
     path('profile/<int:user_id>/', views.profile_detail, name='profile_detail'),
     path('review/<int:user_id>/', views.submit_review, name='submit_review'),
     path('job_listing/', views.job_listing, name='job_listing'),
+    path('logout/', LogoutView.as_view(next_page='/?logged_out=1'), name='logout'),
 
 
 ]

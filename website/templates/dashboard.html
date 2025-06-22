@@ -11,6 +11,18 @@
 </head>
 <body>
 
+
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+           <center> {{ message }}..</center>
+            
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+
 <div class="container mt-5">
     <div class="text-center mb-4">
         <h2 class="fw-bold">Welcome, {{ profile.full_name }}!</h2>
@@ -56,9 +68,10 @@
             <a href="{% url 'edit_profile' %}" class="btn btn-primary px-4 py-2 rounded-pill shadow">Edit Profile</a>
         </div>
         <div class="text-center mt-3">
-    <a href="{% url 'home' %}" class="btn btn-outline-danger px-4 py-2 rounded-pill shadow-sm">
-        Logout
-    </a>
+    <form method="POST" action="{% url 'logout' %}">
+  {% csrf_token %}
+  <button type="submit" class="text-red-600">Logout</button>
+</form>
 </div>
 
     </div>
