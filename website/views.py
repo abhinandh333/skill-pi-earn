@@ -25,6 +25,9 @@ def home(request):
 
 
 
+from django.core.mail import send_mail
+from django.shortcuts import render, redirect
+
 def contact(request):
     if request.method == "POST":
         message = request.POST['message']
@@ -32,18 +35,23 @@ def contact(request):
         email = request.POST['email']
         subject = request.POST['subject']
 
-        context = {
-            'message': message,
-            'name': name,
-            'email': email,
-            'subject': subject,
-        }
+        full_message = f"Message from {name} <{email}>:\n\n{message}"
 
-        return render(request, 'contact.html', context)
+        send_mail(
+            subject,
+            full_message,
+            email,
+            ['skillpiearn333@gmail.com'],  # Replace with your email
+            fail_silently=False,
+        )
 
+        # Store name in session to show thank you message
+        request.session['contact_name'] = name
+        return redirect('contact')  # Redirect to same page (GET method)
 
-    else:
-        return render(request, 'contact.html')
+    name = request.session.pop('contact_name', None)  # Get and remove from session
+    return render(request, 'contact.html', {'name': name})
+
     
 def about(request):
     return render(request, 'about.html')
@@ -138,6 +146,9 @@ from django.db.models import Q
 from django.shortcuts import render
 from .models import Profile
 from .forms import SearchForm
+from django.shortcuts import render
+from .forms import SearchForm
+from .models import Profile
 
 def search_employees(request):
     form = SearchForm(request.GET or None)
@@ -157,11 +168,19 @@ def search_employees(request):
             results = results.filter(district__icontains=district)
         if city != "all":
             results = results.filter(city__icontains=city)
+
         if category != "all":
             results = results.filter(category__icontains=category)
+        else:
+            # If category is 'all', don't show any results
+            results = results.none()
+            messages.warning(request, "⚠️ Work category is required to filter results.")
 
-    return render(request, 'search_results.html', {'form': form, 'results': results})
-
+    # ✅ Always return a response
+    return render(request, "search_results.html", {
+        "form": form,
+        "results": results
+    })
 
 
 

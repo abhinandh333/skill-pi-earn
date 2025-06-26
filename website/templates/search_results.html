@@ -94,7 +94,7 @@
       <input list="category-options" name="category" id="category" value="{{ request.GET.category }}" placeholder="Type or choose Work category "
              class="w-full p-2 border border-gray-500 rounded bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
       <datalist id="category-options">
-        <option value="All">
+        
         <option value="Founder & CEO of Skill PI Earn">
         <option value="Driver">
         <option value="Carpenter">
@@ -200,5 +200,16 @@
 {% else %}
   <p class="mt-10 text-center text-gray-500">😕 No results found. Try a different filter.</p>
 {% endif %}
+
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="bg-yellow-100 text-center text-yellow-800 border-l-4 border-yellow-500 p-4 my-2 rounded">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+
 
 {% endblock %}
