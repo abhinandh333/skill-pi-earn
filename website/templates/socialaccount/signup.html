@@ -1,0 +1,13 @@
+
+{% load socialaccount %}
+
+{% block code %}
+<div class="container mt-5">
+    <h2>Complete Sign Up</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Continue</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'hf.html' %}
+{% load static %}
+
+{% block code %}
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-black px-4 py-10">
+  <div class="w-full max-w-3xl bg-black/1 backdrop-blur-lg rounded-xl shadow-2xl p-8 border border-gray-700">
+
+    <h2 class="text-3xl font-extrabold text-center text-indigo-400 mb-10">🧾 Update Your Profile</h2>
+    <p style="color: red;">Category is the keyword of your work field e.g., Driver, Carpenter, etc...</p>
+
+
+
+    <form method="POST" enctype="multipart/form-data" class="space-y-6">
+      {% csrf_token %}
+      {% for field in form %}
+        <div>
+          <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-1">
+            {{ field.label }}
+          </label>
+          {{ field }}
+          {% if field.errors %}
+            <p class="text-red-400 text-sm mt-1">{{ field.errors|striptags }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+
+
+
+      <button type="submit"
+              class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 transition-colors duration-300 text-white font-semibold py-2 px-4 rounded-lg shadow-md">
+        💾 Save Changes
+      </button>
+    </form>
+
+  </div>
+</div>
+
+<style>
+  input, select, textarea {
+    background-color: rgba(31, 41, 55, 0.7) !important; /* semi-transparent dark bg */
+    color: white !important;
+    border: 1px solid #4b5563 !important; /* Tailwind border-gray-600 */
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    width: 100%;
+    font-size: 0.95rem;
+    transition: all 0.2s ease-in-out;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #6366f1 !important; /* indigo focus */
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+  }
+
+  ::placeholder {
+    color: #9ca3af !important;
+  }
+
+  select option,
+  datalist option {
+    background-color: #1f2937 !important;
+    color: #ffffff !important;
+  }
+
+  input[type="radio"],
+  input[type="checkbox"] {
+    accent-color: #8b5cf6;
+  }
+</style>
+{% endblock %}

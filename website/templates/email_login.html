@@ -1,0 +1,11 @@
+<!-- templates/email_login.html -->
+
+<h2>Email Login</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+    <button type="submit">Login</button>
+</form>

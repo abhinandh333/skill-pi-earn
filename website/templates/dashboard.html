@@ -1,0 +1,83 @@
+{% extends 'hf.html' %}
+{% load static %}
+{% block code %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+           <center> {{ message }}..</center>
+            
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2 class="fw-bold">Welcome, {{ profile.full_name }}!</h2>
+        <p class="text-muted">Here's your complete profile information.</p>
+    </div>
+
+    <div class="card shadow-lg rounded-4 p-4 bg-light border-0">
+        <div class="row">
+            <div class="col-md-8">
+                <ul class="list-group list-group-flush fs-5">
+                    <li class="list-group-item"><strong>Email:</strong> {{ request.user.email }}</li>
+                    <li class="list-group-item"><strong>Phone Number:</strong> {{ profile.phone_number }}</li>
+                    <li class="list-group-item"><strong>Alternate Phone:</strong> {{ profile.alternate_phone }}</li>
+                    <li class="list-group-item"><strong>User Type:</strong> {{ profile.user_type }}</li>
+                    <li class="list-group-item"><strong>State:</strong> {{ profile.state }}</li>
+                    <li class="list-group-item"><strong>District:</strong> {{ profile.district }}</li>
+                    <li class="list-group-item"><strong>City:</strong> {{ profile.city }}</li>
+                    <li class="list-group-item"><strong>Category:</strong> {{ profile.category }}</li>
+                    <li class="list-group-item"><strong>Date of birth:</strong> {{ profile.date_of_birth }}</li>
+                    <li class="list-group-item"><strong>Age:</strong> {{ profile.age }}</li>
+                    
+                </ul>
+            </div>
+
+            <div class="col-md-4 text-center">
+                {% if profile.profile_picture %}
+                    <p class="mt-3"><strong>Profile Picture:</strong></p>
+                        <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{{ MEDIA_URL }}profile_pics/default.jpg{% endif %}"
+                            alt="Profile"
+                            width="100"
+                            height="100"
+                            style="border-radius: 50%;">
+                {% endif %}
+
+                {% if profile.product_image %}
+                    <p><strong>Product Image:</strong></p>
+                    <img src="{{ profile.product_image.url }}" class="img-thumbnail rounded mb-3" style="width: 150px; height: 150px;" alt="Product">
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'edit_profile' %}" class="btn btn-primary px-4 py-2 rounded-pill shadow">Edit Profile</a>
+        </div>
+        <div class="text-center mt-3">
+    <form method="POST" action="{% url 'logout' %}">
+  {% csrf_token %}
+  <button type="submit" class="text-red-600">Logout</button>
+</form>
+</div>
+
+    </div>
+</div>
+
+
+
+</html>
+{% endblock %}

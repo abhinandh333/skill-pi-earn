@@ -1,0 +1,99 @@
+{% extends 'hf.html' %}
+{% block code %}
+
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<div class="container my-5" style="max-width: 600px;">
+  <h2 class="text-center mb-4">Complete Your Profile</h2>
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label for="id_user_type">User Type</label>
+      <select name="user_type" id="id_user_type" class="form-control" required>
+        <option value="">Select your role</option>
+        <option value="employee">Employee</option>
+        <option value="owner">Shop/Enterprise Owner</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="id_phone_number">Phone Number</label>
+      <input type="text" name="phone_number" maxlength="15" required class="form-control" id="id_phone_number">
+    </div>
+
+    <div class="form-group">
+      <label for="id_alt_number">Alternative Number</label>
+      <input type="text" name="alt_number" maxlength="15" class="form-control" id="id_alt_number">
+    </div>
+
+    <div class="form-group">
+      <label for="id_state">State</label>
+      <select name="state" id="id_state" class="form-control" required>
+        <option value="Kerala" selected>Kerala</option>
+        <option value="Tamil Nadu">Tamil Nadu</option>
+        <option value="Karnataka">Karnataka</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="id_district">District</label>
+      <select name="district" id="id_district" class="form-control" required>
+        <option value="">Select a district</option>
+        <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+        <option value="Kollam">Kollam</option>
+        <option value="Pathanamthitta">Pathanamthitta</option>
+        <option value="Alappuzha">Alappuzha</option>
+        <option value="Kottayam">Kottayam</option>
+        <option value="Idukki">Idukki</option>
+        <option value="Ernakulam">Ernakulam</option>
+        <option value="Thrissur">Thrissur</option>
+        <option value="Palakkad">Palakkad</option>
+        <option value="Malappuram">Malappuram</option>
+        <option value="Kozhikode">Kozhikode</option>
+        <option value="Wayanad">Wayanad</option>
+        <option value="Kannur">Kannur</option>
+        <option value="Kasaragod">Kasaragod</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="id_city">City</label>
+      <input type="text" name="city" id="id_city" class="form-control" placeholder="Enter your city">
+    </div>
+
+    <div class="form-group">
+      <label for="id_category">Your Job or Company</label>
+      <input type="text" name="category" maxlength="255" required class="form-control" id="id_category" placeholder="e.g., Electrician or Catering or Driver(Taxi,Auto Driver etc)">
+    </div>
+
+    <div class="form-group">
+      <label for="id_profile_picture">Profile Picture</label>
+      <input type="file" name="profile_picture" accept="image/*" class="form-control-file" id="id_profile_picture">
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary px-4">Submit</button>
+    </div>
+  </form>
+</div>
+
+<!-- Initialize Select2 -->
+<script>
+  $(document).ready(function () {
+    $('#id_district').select2({
+      placeholder: "Search district...",
+      allowClear: true,
+      width: '100%'
+    });
+  });
+</script>
+
+
+{% endblock %}
