@@ -83,6 +83,18 @@ class Profile(models.Model):
     blank=True,
     null=True)
 
+    instagram_link = models.URLField(blank=True, null=True)
+    facebook_link= models.URLField(blank=True, null=True)
+    linkedin_link= models.URLField(blank=True, null=True)
+    website_link= models.URLField(blank=True, null=True)
+    whatsapp_number = models.CharField(max_length=20, blank=True, null=True)
+    youtube_link = models.URLField(blank=True, null=True)  # ✅ Add this line
+
+    def get_whatsapp_link(self):
+        if self.whatsapp:
+            return f"https://wa.me/{self.whatsapp}"
+        return None
+
 
     product_image = models.ImageField(upload_to='product_images/', blank=True, null=True)
 

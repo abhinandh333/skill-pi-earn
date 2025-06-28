@@ -1,13 +1,24 @@
+{% extends "hf.html" %}
 
-{% load socialaccount %}
+{% load i18n %}
 
 {% block code %}
-<div class="container mt-5">
-    <h2>Complete Sign Up</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Continue</button>
+  <div class="max-w-md mx-auto mt-12 p-6 bg-white rounded-xl shadow">
+    <h1 class="text-2xl font-bold mb-4">{% trans "Complete Signup" %}</h1>
+
+    <form method="post" action="{% url 'socialaccount_signup' %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <button type="submit" class="mt-4 w-full py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+        {% trans "Sign Up" %}
+      </button>
     </form>
-</div>
+
+    <p class="mt-4 text-sm text-center">
+      <a href="{% url 'account_reset_password' %}" class="text-indigo-600 hover:underline">
+        {% trans "Forgot password?" %}
+      </a>
+    </p>
+  </div>
 {% endblock %}

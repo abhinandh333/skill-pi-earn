@@ -128,12 +128,17 @@ class ProfileEditForm(forms.ModelForm):
             'city',
             'category',
             'profile_picture',
-            'product_image'
+            'product_image',
+            'instagram_link', 'facebook_link', 'linkedin_link', 'website_link', 'whatsapp_number', 'youtube_link',
         ]
 
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+    
         }
+   
+
+
 from django import forms
 from .models import Profile  # Replace with your model
 

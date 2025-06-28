@@ -52,31 +52,103 @@
   {% if profile.description %}
   <p class="text-black-200 mt-2"><strong>About:</strong> {{ profile.description }}</p>
 {% endif %}
-   
+ <br>  
+
 
 
 <center>
-              <div class="mt-4">
-  <h3 class="text-lg font-medium text-indigo-700"></h3>
-  <p class="text-2xl text-yellow-500 font-bold">
-    ✰{{ profile.average_rating }} 
-  
-  <p class="text-sm text-gray-500">
-    (Based on {{ profile.rating_count }} {{ profile.rating_count|pluralize:"review,reviews" }})
-  </p>
+                  <div class="mt-4">
+      <h3 class="text-lg font-medium text-indigo-700"></h3>
+      <p class="text-2xl text-yellow-500 font-bold">
+        ✰{{ profile.average_rating }} 
+      
+      <p class="text-sm text-gray-500">
+        (Based on {{ profile.rating_count }} {{ profile.rating_count|pluralize:"review,reviews" }})
+      </p>
+    </div>
+
+
+
+
+
+                  <!-- Show "Leave a Review" button -->
+
+                  <a href="{% url 'submit_review' profile.user.id %}">
+                    <button class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">➕ Leave a Review</button>
+                  </a>
+
+
+                
+
+<!-- Centered Connect via section -->
+<div class="flex justify-center mt-6">
+  <div class="flex items-center space-x-3 text-2xl">
+    <span class="font-bold text-indigo-600 text-lg">Connect Me via:</span>
+
+    {% if profile.instagram_link %}
+      <a href="{{ profile.instagram_link }}" target="_blank" class="text-pink-500 hover:text-pink-700" title="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+    {% endif %}
+
+    {% if profile.facebook_link %}
+      <a href="{{ profile.facebook_link }}" target="_blank" class="text-blue-600 hover:text-blue-800" title="Facebook">
+        <i class="fab fa-facebook"></i>
+      </a>
+    {% endif %}
+
+    {% if profile.linkedin_link %}
+      <a href="{{ profile.linkedin_link }}" target="_blank" class="text-blue-700 hover:text-blue-900" title="LinkedIn">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    {% endif %}
+
+    {% if profile.whatsapp_number %}
+      <a href="https://wa.me/{{ profile.whatsapp_number }}" target="_blank" class="text-green-500 hover:text-green-700" title="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+    {% endif %}
+
+    {% if profile.youtube_link %}
+      <a href="{{ profile.youtube_link }}" target="_blank" class="text-red-600 hover:text-red-800" title="YouTube">
+        <i class="fab fa-youtube"></i>
+      </a>
+    {% endif %}
+
+    {% if profile.website_link %}
+      <a href="{{ profile.website_link }}" target="_blank" class="text-gray-600 hover:text-black" title="Website">
+        <i class="fas fa-globe"></i>
+      </a>
+    {% endif %}
+  </div>
 </div>
 
-
-
-
-
-              <!-- Show "Leave a Review" button -->
-
-              <a href="{% url 'submit_review' profile.user.id %}">
-                <button class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">➕ Leave a Review</button>
-              </a>
-
 </center>
+
+
+
+
+
+<!-- Share section -->
+{% with request.build_absolute_uri as profile_url %}
+  <div class="flex justify-center mt-8 flex-col items-center space-y-4">
+
+    <!-- Share title -->
+    <h2 class="text-xl font-semibold text-indigo-600">Share this profile</h2>
+
+    
+
+    <!-- Copy Link Button -->
+    <div class="relative">
+      <button onclick="copyProfileURL()" class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm">
+        <i class="fas fa-link mr-2"></i> Copy Profile URL
+      </button>
+      <span id="copy-msg" class="text-green-500 text-sm absolute top-full mt-1 hidden">Link copied!</span>
+    </div>
+  </div>
+{% endwith %}
+
+
 
 
 
@@ -109,6 +181,21 @@
 </div>
 
 <br>
+<script>
+  function copyProfileURL() {
+    const tempInput = document.createElement("input");
+    tempInput.value = "{{ request.build_absolute_uri }}";
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+
+    // Show "copied" message
+    const msg = document.getElementById("copy-msg");
+    msg.classList.remove("hidden");
+    setTimeout(() => msg.classList.add("hidden"), 2000);
+  }
+</script>
 
 
 {% endblock %}
