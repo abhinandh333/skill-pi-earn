@@ -10,11 +10,16 @@ TELEGRAM_TOKEN = '8096399192:AAG4WdkAn29KHUl4QFT0hwUAjiaRM5zHqBY'  # 🔁 Replac
 BASE_URL = 'http://127.0.0.1:8000/api/'  # 🔁 Replace with your Django backend base API URL
 
 # Stages of registration
-FULL_NAME, CATEGORY, CITY, DISTRICT, STATE, EMAIL_OPTIONAL = range(6)
+FULL_NAME, CATEGORY, CITY, DISTRICT, STATE, PHONE_NUMBER, EMAIL_OPTIONAL = range(7)
+
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("👋 Welcome to SkillπEarn Bot!\nUse /register to register as a worker.\nUse /search to find workers.\nUse /myprofile to view your info.")
     
+
+
+
+
 # ===== REGISTRATION FLOW =====
 async def register(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data['telegram_user_id'] = update.effective_user.id
@@ -43,17 +48,23 @@ async def get_district(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def get_state(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data['state'] = update.message.text
-    await update.message.reply_text("📧 (Optional) Enter your email or type skip:")
+    await update.message.reply_text("📞 Enter your phone number:")
+    return PHONE_NUMBER
+
+async def get_phone_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    context.user_data['phone_number'] = update.message.text
+    await update.message.reply_text("📧Enter your email or set as phonenumber@gmail.com for future:")
     return EMAIL_OPTIONAL
+
 
 async def get_email(update: Update, context: ContextTypes.DEFAULT_TYPE):
     email = update.message.text
     if email.lower() != 'skip':
         context.user_data['email'] = email
     else:
-        context.user_data['email'] = None
+        context.user_data['email'] = f"{context.user_data['telegram_user_id']}@noemail.skillpi"
 
-    # Send data to Django API
+    # Prepare payload
     payload = {
         "telegram_user_id": context.user_data['telegram_user_id'],
         "full_name": context.user_data['full_name'],
@@ -61,19 +72,37 @@ async def get_email(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "city": context.user_data['city'],
         "district": context.user_data['district'],
         "state": context.user_data['state'],
-        "email": context.user_data['email']
+        "email": context.user_data['email'],
+        "phone_number": context.user_data['phone_number'],
     }
 
     try:
         res = requests.post(BASE_URL + 'telegram-register/', json=payload)
         if res.status_code == 200:
             await update.message.reply_text("✅ Registered successfully!")
+        elif res.status_code == 400:
+            errors = res.json()
+            # Check for "already registered" case
+            if "User already registered with this Telegram ID." in str(errors):
+                await update.message.reply_text("⚠️ You're already registered. Showing your profile...")
+                return await my_profile(update, context)  # 🔁 Call my_profile instead
+            else:
+                # General validation errors
+                if isinstance(errors, dict):
+                    error_messages = "\n".join([f"{field}: {', '.join(msgs)}" for field, msgs in errors.items()])
+                elif isinstance(errors, list):
+                    error_messages = "\n".join(errors)
+                else:
+                    error_messages = str(errors)
+
+                await update.message.reply_text(f"❌ Invalid Data Received:\n{error_messages}")
         else:
-            await update.message.reply_text(f"⚠️ Error: {res.json().get('non_field_errors', res.text)}")
+            await update.message.reply_text(f"⚠️ Unexpected error: {res.status_code}\n{res.text}")
     except Exception as e:
-        await update.message.reply_text("❌ Server error. Please try again later.")
+        await update.message.reply_text(f"❌ Server error: {str(e)}")
 
     return ConversationHandler.END
+
 
 # ===== MY PROFILE =====
 async def my_profile(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -82,14 +111,22 @@ async def my_profile(update: Update, context: ContextTypes.DEFAULT_TYPE):
         res = requests.get(BASE_URL + f'my-profile/{telegram_user_id}/')
         if res.status_code == 200:
             data = res.json()
+            phone = data.get('phone_number', 'N/A')
+            if phone != 'N/A' and len(phone) >= 4:
+                masked_phone = 'X' * (len(phone) - 4) + phone[-4:]
+            else:
+                masked_phone = phone
+
             msg = (
                 f"👤 *{data['full_name']}*\n"
-                f"📞 {data.get('phone_number')}\n"
+                f"📞 {masked_phone}\n"
                 f"📍 {data['city']}, {data['district']}, {data['state']}\n"
                 f"💼 {data['category']}\n"
                 f"📝 {data.get('description', '')}"
             )
-            await update.message.reply_text(msg, parse_mode='Markdown')
+            MAX_LENGTH = 4000  # Telegram safe limit under 4096
+            for i in range(0, len(msg), MAX_LENGTH):
+                await update.message.reply_text(msg[i:i+MAX_LENGTH], parse_mode='Markdown')
         else:
             await update.message.reply_text("❌ Profile not found. Please register using /register")
     except Exception:
@@ -113,14 +150,22 @@ async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if data:
             reply = ""
             for p in data:
+                phone = p.get('phone_number', 'N/A')
+                if phone != 'N/A' and len(phone) >= 4:
+                    masked_phone = 'X' * (len(phone) - 4) + phone[-4:]
+            else:
+                masked_phone = phone
+
                 reply += (
                     f"👤 *{p['full_name']}*\n"
-                    f"📞 {p['phone_number']}\n"
+                    f"📞 {masked_phone}\n"
                     f"📍 {p['city']}, {p['district']}, {p['state']}\n"
                     f"💼 {p['category']}\n"
-                    f"📝 {p['description']}\n\n"
+                    f"📝 {p.get('description', '')}\n\n"
                 )
-            await update.message.reply_text(reply, parse_mode='Markdown')
+            MAX_LENGTH = 4000
+            for i in range(0, len(reply), MAX_LENGTH):
+                await update.message.reply_text(reply[i:i + MAX_LENGTH], parse_mode='Markdown')
         else:
             await update.message.reply_text("❌ No matching profiles found.")
     except Exception as e:
@@ -151,6 +196,7 @@ def main():
             CITY: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_city)],
             DISTRICT: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_district)],
             STATE: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_state)],
+            PHONE_NUMBER: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_phone_number)],
             EMAIL_OPTIONAL: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_email)],
         },
         fallbacks=[CommandHandler('cancel', cancel)]

@@ -277,15 +277,36 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import RegisterTelegramSerializer
+from django.views.decorators.csrf import csrf_exempt
+
 
 
 @api_view(['POST'])
+@csrf_exempt
 def telegram_register(request):
     serializer = RegisterTelegramSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
+        user = serializer.save()
+
+        # 🔁 Ensure WorkerProfile exists (create if missing)
+        if not WorkerProfile.objects.filter(user=user).exists():
+            WorkerProfile.objects.create(
+                user=user,
+                full_name=user.full_name,
+                category=request.data.get('category', ''),
+                city=request.data.get('city', ''),
+                district=request.data.get('district', ''),
+                state=request.data.get('state', ''),
+            )
+
         return Response({"message": "Registered successfully ✅"}, status=200)
-    return Response(serializer.errors, status=400)
+    else:
+        print("❌ Invalid Data Received:")
+        print(request.data)
+        print("❌ Serializer Errors:")
+        print(serializer.errors)
+        return Response(serializer.errors, status=400)
+
 
 
 # website/views.py
