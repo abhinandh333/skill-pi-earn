@@ -32,6 +32,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     full_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     date_of_birth = models.DateField(null=True, blank=True)
+    telegram_user_id = models.BigIntegerField(blank=True, null=True)
+    from_telegram = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -160,3 +162,24 @@ class Review(models.Model):
     def __str__(self):
         return f"Review for {self.profile.user.email} by {self.reviewer_name}"
 
+
+
+
+# website/models.py
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+
+
+class WorkerProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=100)
+    category = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    district = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=20, blank=True, default="Not Provided")
+    description = models.TextField(blank=True, default="No description provided.")
+
+    def __str__(self):
+        return self.full_name

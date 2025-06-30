@@ -10,6 +10,8 @@ from .views import edit_profile
 from django.contrib.auth.views import LogoutView
 from django.urls import path
 from website.views import robots_txt
+from django.urls import path
+from .views import telegram_register, search_profiles, my_profile
 
 
 urlpatterns = [
@@ -33,6 +35,9 @@ urlpatterns = [
     path('job_listing/', views.job_listing, name='job_listing'),
     path('logout/', LogoutView.as_view(next_page='/?logged_out=1'), name='logout'),
     path("robots.txt", robots_txt, name="robots_txt"),
+    path('api/telegram-register/', telegram_register, name='telegram_register'),
+    path('api/my-profile/<int:telegram_user_id>/', my_profile, name='my_profile'),
+    path('api/search-profiles/', search_profiles, name='search_profiles'),
 
 
 ]

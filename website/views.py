@@ -16,6 +16,7 @@ from .forms import ProfileEditForm
 
 
 
+
 # Create your views here.from django.shortcuts import render
 
 def home(request):
@@ -264,4 +265,68 @@ def robots_txt(request):
         "Sitemap: https://www.skillpiearn.com/sitemap.xml"
     )
     return HttpResponse(content, content_type="text/plain")
+
+
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import WorkerProfile, CustomUser
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import RegisterTelegramSerializer
+
+
+@api_view(['POST'])
+def telegram_register(request):
+    serializer = RegisterTelegramSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "Registered successfully ✅"}, status=200)
+    return Response(serializer.errors, status=400)
+
+
+# website/views.py
+from .models import WorkerProfile
+from rest_framework import serializers
+
+class WorkerProfileSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkerProfile
+        fields = ['full_name', 'phone_number', 'city', 'district', 'state', 'category', 'description']
+
+@api_view(['GET'])
+def search_profiles(request):
+    category = request.GET.get('category', '').strip().lower()
+    city = request.GET.get('city', '').strip().lower()
+    district = request.GET.get('district', '').strip().lower()
+
+    qs = WorkerProfile.objects.all()
+
+    if city:
+        qs = qs.filter(city__iexact=city)
+    elif district:
+        qs = qs.filter(district__iexact=district)
+
+    if category:
+        qs = qs.filter(category__iexact=category)
+
+    results = qs[:2]  # Limit to 2
+
+    serializer = WorkerProfileSearchSerializer(results, many=True)
+    return Response(serializer.data)
+
+
+
+@api_view(['GET'])
+def my_profile(request, telegram_user_id):
+    try:
+        user = CustomUser.objects.get(telegram_user_id=telegram_user_id)
+        profile = WorkerProfile.objects.get(user=user)
+        serializer = WorkerProfileSearchSerializer(profile)
+        return Response(serializer.data)
+    except:
+        return Response({"error": "Profile not found"}, status=404)
 

@@ -30,3 +30,5 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
             # If you really still need profile completion
             # raise ImmediateHttpResponse(redirect(reverse('complete_profile')))
             pass
+
+
