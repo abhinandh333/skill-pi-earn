@@ -79,7 +79,13 @@ async def get_email(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         res = requests.post(BASE_URL + 'telegram-register/', json=payload)
         if res.status_code == 200:
-            await update.message.reply_text("✅ Registered successfully!")
+            dashboard_link = f"http://127.0.0.1:8000/dashboard/"
+            await update.message.reply_text(
+              "✅ Registered successfully!\n\n"
+             f"🔗 [Go to your dashboard]({dashboard_link})",
+             parse_mode='Markdown'
+    )
+
         elif res.status_code == 400:
             errors = res.json()
             # Check for "already registered" case
