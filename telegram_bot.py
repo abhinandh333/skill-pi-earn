@@ -7,7 +7,7 @@ from telegram.ext import Application
 
 
 TELEGRAM_TOKEN = '8096399192:AAG4WdkAn29KHUl4QFT0hwUAjiaRM5zHqBY'  # 🔁 Replace this with your bot token
-BASE_URL = 'http://127.0.0.1:8000/api/'  # 🔁 Replace with your Django backend base API URL
+BASE_URL = 'https://skillpiearn.com/api/'  # 🔁 Replace with your Django backend base API URL
 
 # Stages of registration
 FULL_NAME, CATEGORY, CITY, DISTRICT, STATE, PHONE_NUMBER, EMAIL_OPTIONAL = range(7)
@@ -79,7 +79,7 @@ async def get_email(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         res = requests.post(BASE_URL + 'telegram-register/', json=payload)
         if res.status_code == 200:
-            dashboard_link = f"http://127.0.0.1:8000/dashboard/"
+            dashboard_link = f"https://skillpiearn.com/dashboard/"
             await update.message.reply_text(
               "✅ Registered successfully!\n\n"
              f"🔗 [Go to your dashboard]({dashboard_link})",
