@@ -1,1 +1,1 @@
-web: gunicorn skill_and_earn.wsgi:application
+web: honcho start -f Procfile.dev

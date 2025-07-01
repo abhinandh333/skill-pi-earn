@@ -1,0 +1,2 @@
+django: gunicorn skill_and_earn.wsgi:application
+bot: python telegram_bot.py
