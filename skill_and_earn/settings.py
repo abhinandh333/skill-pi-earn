@@ -203,6 +203,10 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
+
+
+
 
 
 
