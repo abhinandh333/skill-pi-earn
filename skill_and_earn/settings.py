@@ -195,6 +195,14 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # settings.py
 LOGIN_URL = '/accounts/login/'
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://skillpiearn.com",
+    "https://www.skillpiearn.com",
+    # If using www version too, include this:
+    # "https://www.skillpiearn.com",
+]
+
+
 
 
 
